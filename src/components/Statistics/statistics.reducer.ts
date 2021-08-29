@@ -10,12 +10,13 @@ import {
 interface DefaultStateI {
   loading: boolean;
   error: boolean | StatisticsResponseError;
-  statistics?: Statistic[];
+  statistics: Statistic[];
 }
 
 const defaultState: DefaultStateI = {
   loading: false,
   error: false,
+  statistics: [],
 };
 
 const statisticsReducer = (
@@ -25,16 +26,19 @@ const statisticsReducer = (
   switch (action.type) {
     case STATISTICS_LOADING:
       return {
+        ...state,
         loading: true,
         error: false,
       };
     case STATISTICS_ERROR:
       return {
+        ...state,
         loading: false,
         error: action.payload.errors,
       };
     case STATISTICS_SUCCESS:
       return {
+        ...state,
         loading: false,
         error: false,
         statistics: action.payload.response,

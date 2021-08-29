@@ -3,29 +3,29 @@ export const STATISTICS_ERROR = "STATISTICS_ERROR";
 export const STATISTICS_SUCCESS = "STATISTICS_SUCCESS";
 
 type Cases = {
-  new?: string;
-  active?: number;
-  critical?: number;
-  recovered?: number;
-  "1M_pop"?: string;
-  total?: number;
+  new: string;
+  active: number;
+  critical: number;
+  recovered: number;
+  "1M_pop": string;
+  total: number;
 };
 
 type Deaths = {
-  new?: string;
-  "1M_pop"?: string;
-  total?: number;
+  new: string;
+  "1M_pop": string;
+  total: number;
 };
 
 type Tests = {
-  "1M_pop"?: string;
-  total?: number;
+  "1M_pop": string;
+  total: number;
 };
 
 export type Statistic = {
   continent: string;
   country: string;
-  population?: number;
+  population: number;
   cases: Cases;
   deaths: Deaths;
   tests: Tests;
@@ -49,7 +49,7 @@ export type StatisticsResponse = {
   // parameters: CountryError;
   errors: StatisticsResponseError;
   // results: number;
-  response?: Statistic[];
+  response: Statistic[];
 };
 
 interface StatisticsLoading {

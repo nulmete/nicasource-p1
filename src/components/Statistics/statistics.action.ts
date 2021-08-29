@@ -52,7 +52,7 @@ export const getStatistics =
         type: STATISTICS_ERROR,
         payload: {
           errors: "Network error",
-          response: undefined,
+          response: [],
         },
       });
     }
