@@ -14,6 +14,6 @@ const renderApp = () => {
 
 test("renders learn react link", () => {
   renderApp();
-  const linkElement = screen.getByText("MUI table here");
+  const linkElement = screen.getByText("Loading...");
   expect(linkElement).toBeInTheDocument();
 });

@@ -1,4 +1,5 @@
-type ObjectKey = string | number | symbol;
+// This is not used since react-table can group by columns
+export type ObjectKey = string | number | symbol;
 
 export const groupByKey = <
   K extends ObjectKey,
