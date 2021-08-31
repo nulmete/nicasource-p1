@@ -1,22 +1,25 @@
 import {
-  StatisticsResponseError,
+  CountryError,
   Statistic,
   StatisticsDispatchTypes,
   STATISTICS_ERROR,
   STATISTICS_LOADING,
   STATISTICS_SUCCESS,
+  STATISTIC_DETAIL,
 } from "./statistics.actionTypes";
 
 interface DefaultStateI {
   loading: boolean;
-  error: boolean | StatisticsResponseError;
+  error: boolean | CountryError;
   statistics: Statistic[];
+  currentStatistic: Statistic;
 }
 
 const defaultState: DefaultStateI = {
   loading: false,
   error: false,
   statistics: [],
+  currentStatistic: {},
 };
 
 const statisticsReducer = (
@@ -34,7 +37,7 @@ const statisticsReducer = (
       return {
         ...state,
         loading: false,
-        error: action.payload.errors,
+        error: <CountryError>action.payload.errors,
       };
     case STATISTICS_SUCCESS:
       return {
@@ -43,6 +46,17 @@ const statisticsReducer = (
         error: false,
         statistics: action.payload.response,
       };
+    case STATISTIC_DETAIL: {
+      const { selectedCountry } = action.payload;
+      const foundCountry =
+        state.statistics.find((s) => s.country === selectedCountry) || {};
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        currentStatistic: foundCountry,
+      };
+    }
     default:
       return state;
   }

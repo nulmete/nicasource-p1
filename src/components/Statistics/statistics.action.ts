@@ -5,6 +5,7 @@ import {
   STATISTICS_LOADING,
   STATISTICS_ERROR,
   STATISTICS_SUCCESS,
+  STATISTIC_DETAIL,
 } from "./statistics.actionTypes";
 
 export const getStatistics =
@@ -51,9 +52,18 @@ export const getStatistics =
       return dispatch({
         type: STATISTICS_ERROR,
         payload: {
-          errors: "Network error",
+          errors: [],
           response: [],
         },
       });
     }
+  };
+
+export const getStatisticDetail =
+  (selectedCountry: string) =>
+  async (dispatch: Dispatch<StatisticsDispatchTypes>) => {
+    dispatch({
+      type: STATISTIC_DETAIL,
+      payload: { selectedCountry },
+    });
   };

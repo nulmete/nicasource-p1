@@ -1,20 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Details, NotFound } from "./pages";
-import { HOME, DETAILS } from "./constants/routes";
-import { Statistics } from "./components/Statistics/Statistics";
+import { BrowserRouter } from "react-router-dom";
+import StatisticsContainer from "./components/Statistics/containers/StatisticsContainer";
 
 const App: React.FC = () => {
   return (
-    <div>
-      <Router>
-        <Switch>
-          <Route component={Statistics} exact path={HOME} />
-          <Route component={Details} exact path={DETAILS} />
-          <Route component={NotFound} />
-        </Switch>
-      </Router>
-    </div>
+    <BrowserRouter>
+      <StatisticsContainer />
+    </BrowserRouter>
   );
 };
 

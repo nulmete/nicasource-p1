@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect } from "react";
+import React from "react";
 import MaUTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";

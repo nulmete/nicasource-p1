@@ -1,6 +1,7 @@
 export const STATISTICS_LOADING = "STATISTICS_LOADING";
 export const STATISTICS_ERROR = "STATISTICS_ERROR";
 export const STATISTICS_SUCCESS = "STATISTICS_SUCCESS";
+export const STATISTIC_DETAIL = "STATISTIC_DETAIL";
 
 type Cases = {
   new: string;
@@ -23,32 +24,24 @@ type Tests = {
 };
 
 export type Statistic = {
-  continent: string;
-  country: string;
-  population: number;
-  cases: Cases;
-  deaths: Deaths;
-  tests: Tests;
-  day: string;
-  time: string;
+  continent?: string;
+  country?: string;
+  population?: number;
+  cases?: Cases;
+  deaths?: Deaths;
+  tests?: Tests;
+  day?: string;
+  time?: string;
 };
 
-// Handles:
-// 1. A { country: ... } error object is returned
-// 2. No errors returned because request was OK.
-// 3. Network error - return a string
-export type StatisticsResponseError =
-  | {
-      country: string;
-    }
-  | []
-  | string;
+export type CountryError = {
+  country: string;
+};
+
+export type StatisticsResponseError = CountryError | [];
 
 export type StatisticsResponse = {
-  // get: string;
-  // parameters: CountryError;
   errors: StatisticsResponseError;
-  // results: number;
   response: Statistic[];
 };
 
@@ -66,7 +59,15 @@ interface StatisticsSuccess {
   payload: StatisticsResponse;
 }
 
+interface StatisticDetail {
+  type: typeof STATISTIC_DETAIL;
+  payload: {
+    selectedCountry: string;
+  };
+}
+
 export type StatisticsDispatchTypes =
   | StatisticsLoading
   | StatisticsError
-  | StatisticsSuccess;
+  | StatisticsSuccess
+  | StatisticDetail;
