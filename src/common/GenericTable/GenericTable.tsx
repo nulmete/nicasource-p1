@@ -2,11 +2,32 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
 import MaUTable from "@material-ui/core/Table";
+import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { useExpanded, useGroupBy, useTable } from "react-table";
+import { Theme, withStyles, createStyles } from "@material-ui/core";
+
+const StyledTableCell = withStyles((theme: Theme) =>
+  createStyles({
+    head: {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.common.white,
+    },
+  })
+)(TableCell);
+
+const StyledTableRow = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      "&:nth-of-type(odd)": {
+        backgroundColor: theme.palette.action.hover,
+      },
+    },
+  })
+)(TableRow);
 
 // TODO: improve typings
 interface GenericTableProps {
@@ -32,15 +53,15 @@ export const GenericTable: React.FC<GenericTableProps> = ({
 
   return (
     <>
-      <div>
+      <TableContainer>
         <MaUTable {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup) => (
               <TableRow {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <TableCell {...column.getHeaderProps()}>
+                  <StyledTableCell {...column.getHeaderProps()}>
                     {column.render("Header")}
-                  </TableCell>
+                  </StyledTableCell>
                 ))}
               </TableRow>
             ))}
@@ -49,10 +70,10 @@ export const GenericTable: React.FC<GenericTableProps> = ({
             {rows.map((row, i) => {
               prepareRow(row);
               return (
-                <TableRow {...row.getRowProps()}>
+                <StyledTableRow {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <TableCell {...cell.getCellProps()}>
+                      <StyledTableCell {...cell.getCellProps()}>
                         {cell.isGrouped ? (
                           // If it's a grouped cell, add an expander and row count
                           <>
@@ -69,15 +90,15 @@ export const GenericTable: React.FC<GenericTableProps> = ({
                           // Otherwise, just render the regular cell
                           cell.render("Cell")
                         )}
-                      </TableCell>
+                      </StyledTableCell>
                     );
                   })}
-                </TableRow>
+                </StyledTableRow>
               );
             })}
           </TableBody>
         </MaUTable>
-      </div>
+      </TableContainer>
     </>
   );
 };

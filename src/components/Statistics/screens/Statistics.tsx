@@ -22,21 +22,34 @@ export const Statistics: React.FC = () => {
     history.push(buildDetailsRoute(selectedCountry));
   };
 
-  const CustomCell: React.FC<CellProps<any>> = ({ cell }) => {
+  interface ClickableCellProps {
+    valueToShow: string;
+    onClick: React.MouseEventHandler<HTMLDivElement>;
+  }
+  const ClickableCell: React.FC<ClickableCellProps> = ({
+    valueToShow,
+    onClick,
+  }) => {
     return (
       <div
         role="button"
         tabIndex={0}
-        onClick={() => {
-          handleSelectCountry(cell.row.values.country);
-        }}
-        // accessibility
+        onClick={onClick}
         onKeyDown={() => {
-          handleSelectCountry(cell.row.values.country);
+          console.log("keydown");
         }}
       >
-        {cell.value}
+        {valueToShow}
       </div>
+    );
+  };
+
+  const CustomCell: React.FC<CellProps<any>> = ({ cell }) => {
+    return (
+      <ClickableCell
+        valueToShow={cell.value}
+        onClick={() => handleSelectCountry(cell.row.values.country)}
+      />
     );
   };
 
@@ -45,11 +58,6 @@ export const Statistics: React.FC = () => {
       {
         Header: "Continent",
         accessor: "continent",
-      },
-      {
-        Header: "Country",
-        accessor: "country",
-        Cell: CustomCell,
       },
       {
         Header: "Population",
@@ -63,6 +71,22 @@ export const Statistics: React.FC = () => {
         accessor: "cases.total",
         aggregate: "sum",
         Aggregated: ({ cell: { value } }: CellProps<Statistic>) => `${value}`,
+        Cell: () => {
+          return CustomCell;
+        },
+      },
+      {
+        Header: "Country",
+        accessor: "country",
+        Cell: CustomCell,
+      },
+      // TODO: format time.
+      {
+        Header: "Last Update",
+        accessor: <T extends Statistic>(originalRow: T) => {
+          const { country } = originalRow;
+          return <span>{country}</span>;
+        },
         Cell: CustomCell,
       },
     ],
