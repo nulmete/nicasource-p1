@@ -14,6 +14,6 @@ const renderApp = () => {
 
 test("renders learn react link", () => {
   renderApp();
-  const linkElement = screen.getByText("Loading...");
+  const linkElement = screen.getByText("Search");
   expect(linkElement).toBeInTheDocument();
 });

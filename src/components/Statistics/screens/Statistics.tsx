@@ -1,27 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { CellProps } from "react-table";
 import { GenericTable } from "../../../common/GenericTable/GenericTable";
 import { buildDetailsRoute } from "../../../constants/routes";
 import { RootStore } from "../../../state/store";
-import { getStatisticDetail } from "../statistics.action";
+import { formatDate } from "../../../utils/formatDate";
+import { getStatistics } from "../statistics.action";
 import { CountryError, Statistic } from "../statistics.actionTypes";
+
+interface LocationState {
+  searchValue?: string;
+}
 
 export const Statistics: React.FC = () => {
   const { error, loading, statistics } = useSelector(
     (state: RootStore) => state.statistics
   );
 
-  const history = useHistory();
-
   const dispatch = useDispatch();
 
+  const location = useLocation();
+  const history = useHistory();
+
+  const locationState = location?.state as LocationState;
+
+  useEffect(() => {
+    if (!locationState?.searchValue) {
+      (async () => {
+        await dispatch(getStatistics());
+      })();
+    }
+    window.history.replaceState({}, document.title);
+  }, []);
+
   const handleSelectCountry = async (selectedCountry: string) => {
-    await dispatch(getStatisticDetail(selectedCountry));
     history.push(buildDetailsRoute(selectedCountry));
   };
 
+  // TODO: move to separate component
   interface ClickableCellProps {
     valueToShow: string;
     onClick: React.MouseEventHandler<HTMLDivElement>;
@@ -35,16 +52,18 @@ export const Statistics: React.FC = () => {
         role="button"
         tabIndex={0}
         onClick={onClick}
+        // TODO accessibility
         onKeyDown={() => {
           console.log("keydown");
         }}
+        style={{ cursor: "pointer" }}
       >
         {valueToShow}
       </div>
     );
   };
 
-  const CustomCell: React.FC<CellProps<any>> = ({ cell }) => {
+  const CustomCell: React.FC<CellProps<Statistic>> = ({ cell }) => {
     return (
       <ClickableCell
         valueToShow={cell.value}
@@ -71,21 +90,18 @@ export const Statistics: React.FC = () => {
         accessor: "cases.total",
         aggregate: "sum",
         Aggregated: ({ cell: { value } }: CellProps<Statistic>) => `${value}`,
-        Cell: () => {
-          return CustomCell;
-        },
+        Cell: CustomCell,
       },
       {
         Header: "Country",
         accessor: "country",
         Cell: CustomCell,
       },
-      // TODO: format time.
       {
         Header: "Last Update",
         accessor: <T extends Statistic>(originalRow: T) => {
-          const { country } = originalRow;
-          return <span>{country}</span>;
+          const { time } = originalRow;
+          return <>{formatDate(time!)}</>;
         },
         Cell: CustomCell,
       },
@@ -93,8 +109,7 @@ export const Statistics: React.FC = () => {
     [statistics]
   );
 
-  // TODO: make a <Loader /> component
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading</div>;
 
   if (error) {
     return (
@@ -104,7 +119,7 @@ export const Statistics: React.FC = () => {
     );
   }
 
-  if (statistics.length === 0) return <div>No results found.</div>;
+  if (!loading && statistics.length === 0) return <div>No results found</div>;
 
   return <GenericTable columns={columns} data={statistics} />;
 };

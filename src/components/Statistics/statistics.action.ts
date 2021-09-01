@@ -5,7 +5,6 @@ import {
   STATISTICS_LOADING,
   STATISTICS_ERROR,
   STATISTICS_SUCCESS,
-  STATISTIC_DETAIL,
 } from "./statistics.actionTypes";
 
 export const getStatistics =
@@ -57,13 +56,4 @@ export const getStatistics =
         },
       });
     }
-  };
-
-export const getStatisticDetail =
-  (selectedCountry: string) =>
-  async (dispatch: Dispatch<StatisticsDispatchTypes>) => {
-    dispatch({
-      type: STATISTIC_DETAIL,
-      payload: { selectedCountry },
-    });
   };

@@ -1,7 +1,6 @@
 export const STATISTICS_LOADING = "STATISTICS_LOADING";
 export const STATISTICS_ERROR = "STATISTICS_ERROR";
 export const STATISTICS_SUCCESS = "STATISTICS_SUCCESS";
-export const STATISTIC_DETAIL = "STATISTIC_DETAIL";
 
 type Cases = {
   new: string;
@@ -59,15 +58,7 @@ interface StatisticsSuccess {
   payload: StatisticsResponse;
 }
 
-interface StatisticDetail {
-  type: typeof STATISTIC_DETAIL;
-  payload: {
-    selectedCountry: string;
-  };
-}
-
 export type StatisticsDispatchTypes =
   | StatisticsLoading
   | StatisticsError
-  | StatisticsSuccess
-  | StatisticDetail;
+  | StatisticsSuccess;

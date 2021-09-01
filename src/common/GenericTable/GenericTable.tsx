@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { useExpanded, useGroupBy, useTable } from "react-table";
 import { Theme, withStyles, createStyles } from "@material-ui/core";
+import { Statistic } from "../../components/Statistics/statistics.actionTypes";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -22,7 +23,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
 const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
     root: {
-      "&:nth-of-type(odd)": {
+      "&:hover": {
         backgroundColor: theme.palette.action.hover,
       },
     },
@@ -39,7 +40,7 @@ export const GenericTable: React.FC<GenericTableProps> = ({
   columns,
   data,
 }) => {
-  const { getTableProps, headerGroups, rows, prepareRow } = useTable(
+  const { getTableProps, headerGroups, rows, prepareRow } = useTable<Statistic>(
     {
       columns,
       data,
@@ -52,53 +53,51 @@ export const GenericTable: React.FC<GenericTableProps> = ({
   );
 
   return (
-    <>
-      <TableContainer>
-        <MaUTable {...getTableProps()}>
-          <TableHead>
-            {headerGroups.map((headerGroup) => (
-              <TableRow {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <StyledTableCell {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </StyledTableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableHead>
-          <TableBody>
-            {rows.map((row, i) => {
-              prepareRow(row);
-              return (
-                <StyledTableRow {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <StyledTableCell {...cell.getCellProps()}>
-                        {cell.isGrouped ? (
-                          // If it's a grouped cell, add an expander and row count
-                          <>
-                            <span {...row.getToggleRowExpandedProps()}>
-                              {row.isExpanded ? "👇" : "👉"}
-                            </span>{" "}
-                            {cell.render("Cell")} ({row.subRows.length})
-                          </>
-                        ) : cell.isAggregated ? (
-                          // If the cell is aggregated, use the Aggregated
-                          // renderer for cell
-                          cell.render("Aggregated")
-                        ) : cell.isPlaceholder ? null : ( // For cells with repeated values, render null
-                          // Otherwise, just render the regular cell
-                          cell.render("Cell")
-                        )}
-                      </StyledTableCell>
-                    );
-                  })}
-                </StyledTableRow>
-              );
-            })}
-          </TableBody>
-        </MaUTable>
-      </TableContainer>
-    </>
+    <TableContainer>
+      <MaUTable {...getTableProps()}>
+        <TableHead>
+          {headerGroups.map((headerGroup) => (
+            <TableRow {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <StyledTableCell {...column.getHeaderProps()}>
+                  {column.render("Header")}
+                </StyledTableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableHead>
+        <TableBody>
+          {rows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <StyledTableRow {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <StyledTableCell {...cell.getCellProps()}>
+                      {cell.isGrouped ? (
+                        // If it's a grouped cell, add an expander and row count
+                        <>
+                          <span {...row.getToggleRowExpandedProps()}>
+                            {row.isExpanded ? "👇" : "👉"}
+                          </span>{" "}
+                          {cell.render("Cell")} ({row.subRows.length})
+                        </>
+                      ) : cell.isAggregated ? (
+                        // If the cell is aggregated, use the Aggregated
+                        // renderer for cell
+                        cell.render("Aggregated")
+                      ) : cell.isPlaceholder ? null : ( // For cells with repeated values, render null
+                        // Otherwise, just render the regular cell
+                        cell.render("Cell")
+                      )}
+                    </StyledTableCell>
+                  );
+                })}
+              </StyledTableRow>
+            );
+          })}
+        </TableBody>
+      </MaUTable>
+    </TableContainer>
   );
 };

@@ -5,7 +5,7 @@ import {
   TextField,
   Theme,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,25 +21,32 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   inputLabel: string;
   inputPlaceholder: string;
-  handleSearch: React.FormEventHandler<HTMLFormElement>;
-  handleInputChange: React.ChangeEventHandler<HTMLInputElement>;
+  handleSearch: (searchValue: string) => void;
 }
 
 const Search: React.FC<Props> = ({
   inputLabel,
   inputPlaceholder,
   handleSearch,
-  handleInputChange,
 }) => {
   const classes = useStyles();
 
+  const [value, setValue] = useState<string>("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSearch(value);
+  };
+
   return (
-    <form className={classes.form} onSubmit={handleSearch}>
+    <form className={classes.form} onSubmit={handleSubmit}>
       <TextField
         label={inputLabel}
         placeholder={inputPlaceholder}
         variant="outlined"
-        onChange={handleInputChange}
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
       />
       <Button
         className={classes.button}

@@ -1,5 +1,5 @@
 import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import NotFound from "../../../common/NotFound/NotFound";
@@ -24,33 +24,21 @@ const StatisticsContainer: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    (async () => {
-      await dispatch(getStatistics());
-    })();
-  }, []);
-
   const location = useLocation();
+
   const history = useHistory();
 
-  const [searchValue, setSearchValue] = useState<string>("");
-
-  const handleSearchInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchValue(e.target.value);
-    },
-    []
-  );
-
   const handleSearchSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+    async (searchValue: string) => {
       if (location.pathname !== HOME) {
-        history.push(HOME);
+        history.push({
+          pathname: HOME,
+          state: { searchValue },
+        });
       }
-      await dispatch(getStatistics(searchValue));
+      dispatch(getStatistics(searchValue));
     },
-    [searchValue]
+    [location.pathname]
   );
 
   return (
@@ -59,9 +47,7 @@ const StatisticsContainer: React.FC = () => {
         inputLabel="Country"
         inputPlaceholder="Enter a country..."
         handleSearch={handleSearchSubmit}
-        handleInputChange={handleSearchInputChange}
       />
-
       <Switch>
         <Route path={HOME} exact component={Statistics} />
         <Route path={DETAILS} exact component={StatisticsDetails} />
