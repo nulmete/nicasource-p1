@@ -23,7 +23,7 @@ const App: React.FC = () => {
         <Switch>
           <Route path={NOT_FOUND} exact component={NotFound} />
           <Route path={HOME} component={StatisticsContainer} />
-          {/* ...other routes... */}
+          {/* ...other routes here... */}
         </Switch>
       </BrowserRouter>
     </Container>
