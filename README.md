@@ -1,13 +1,12 @@
 # Front End Assessment for NicaSource | Part 1
 
-## Deployed version
-
-Go to [https://nulmete.github.io/nicasource-p1/](https://nulmete.github.io/nicasource-p1/).
-
 ## Run locally
 
-Clone the repository and run the application by executing `npm start` or `yarn start` in the root directory.
+- Clone the repository.
+- Go to https://rapidapi.com/api-sports/api/covid-193 and get your `X-RapidAPI-Host` and `X-RapidAPI-Key` keys.
+- Create a `.env` file in the root directory (you can rename `.env.example` to `.env`).
+- In the `.env` file, assign `REACT_APP_RAPID_API_HOST=<X-RapidAPI-Host value from step 2>` and `REACT_APP_RAPID_API_KEY=<X-RapidAPI-Key value from step 2>`.
+- Run `npm install` or `yarn`.
+- Run the application by executing `npm start` or `yarn start`.
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-Note: `npm install` or `yarn install` is not required since it's automatically done as a post-merge hook with husky.
