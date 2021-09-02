@@ -18,15 +18,15 @@ const App: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path={NOT_FOUND} exact component={NotFound} />
-        <Container className={classes.container} maxWidth="xl">
+    <Container className={classes.container} maxWidth="xl">
+      <BrowserRouter>
+        <Switch>
+          <Route path={NOT_FOUND} exact component={NotFound} />
           <Route path={HOME} component={StatisticsContainer} />
           {/* ...other routes... */}
-        </Container>
-      </Switch>
-    </BrowserRouter>
+        </Switch>
+      </BrowserRouter>
+    </Container>
   );
 };
 

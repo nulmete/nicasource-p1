@@ -1,8 +1,7 @@
-import { Button, createStyles, makeStyles } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 import NotFoundImage from "../../assets/404.png";
-import { HOME } from "../../constants/routes";
+import GoBackHome from "../GoBackHome/GoBackHome";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -27,14 +26,7 @@ const NotFound: React.FC = () => {
   return (
     <div className={classes.container}>
       <img src={NotFoundImage} alt="Not found" />
-      <Button
-        variant="contained"
-        color="primary"
-        component={RouterLink}
-        to={HOME}
-      >
-        Go back home
-      </Button>
+      <GoBackHome />
     </div>
   );
 };

@@ -2,11 +2,15 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { CellProps } from "react-table";
+import DisplayError from "../../../common/DisplayError/DisplayError";
 import ClickableCell from "../../../common/GenericTable/ClickableCell";
 import { GenericTable } from "../../../common/GenericTable/GenericTable";
+import Spinner from "../../../common/Spinner/Spinner";
 import { buildDetailsRoute } from "../../../constants/routes";
 import { RootStore } from "../../../state/store";
 import { formatDate } from "../../../utils/formatDate";
+import isNotNullOrUndefined from "../../../utils/isNotNullOrUndefined";
+import renderValueIfExists from "../../../utils/renderValueIfExists";
 import { getStatistics } from "../statistics.action";
 import { CountryError, Statistic } from "../statistics.actionTypes";
 
@@ -28,13 +32,13 @@ export const Statistics: React.FC = () => {
   const locationState = location?.state as LocationState;
 
   useEffect(() => {
-    if (!locationState?.searchValue) {
+    if (!isNotNullOrUndefined(locationState?.searchValue)) {
       (async () => {
         await dispatch(getStatistics());
       })();
     }
 
-    if (locationState?.searchValue) {
+    if (isNotNullOrUndefined(locationState?.searchValue)) {
       window.history.replaceState({}, document.title);
     }
   }, []);
@@ -57,6 +61,14 @@ export const Statistics: React.FC = () => {
       {
         Header: "Continent",
         accessor: "continent",
+        Cell: ({ value }: { value: any }) => {
+          return renderValueIfExists(value);
+        },
+      },
+      {
+        Header: "Country",
+        accessor: "country",
+        Cell: CustomCell,
       },
       {
         Header: "Population",
@@ -73,12 +85,7 @@ export const Statistics: React.FC = () => {
         Cell: CustomCell,
       },
       {
-        Header: "Country",
-        accessor: "country",
-        Cell: CustomCell,
-      },
-      {
-        Header: "Last Update",
+        Header: "Last updated",
         accessor: <T extends Statistic>(originalRow: T) => {
           const { time } = originalRow;
           return <>{formatDate(time!)}</>;
@@ -89,19 +96,18 @@ export const Statistics: React.FC = () => {
     [statistics]
   );
 
-  // TODO: spinner?
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Spinner size="4rem" />;
 
   if (error) {
     return (
-      <div>
+      <DisplayError>
         {(error as CountryError).country || "Network error. Try again later."}
-      </div>
+      </DisplayError>
     );
   }
 
-  // TODO: style
-  if (!loading && statistics.length === 0) return <div>No results found</div>;
+  if (!loading && statistics.length === 0)
+    return <DisplayError>No results found.</DisplayError>;
 
   return <GenericTable columns={columns} data={statistics} />;
 };

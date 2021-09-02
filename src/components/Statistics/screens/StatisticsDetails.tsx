@@ -8,11 +8,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { Redirect, useHistory, useParams } from "react-router-dom";
+import GoBackHome from "../../../common/GoBackHome/GoBackHome";
+import KeyValueSection from "../../../common/KeyValueSection/KeyValueSection";
+import Spinner from "../../../common/Spinner/Spinner";
 import { NOT_FOUND } from "../../../constants/routes";
 import { RootStore } from "../../../state/store";
 import { formatDate } from "../../../utils/formatDate";
-import isNotNullOrUndefined from "../../../utils/isNotNullOrUndefined";
-import renderValueIfExists from "../../../utils/renderValueIfExists";
 import { getStatistics } from "../statistics.action";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -58,66 +59,67 @@ const StatisticsDetails: React.FC = () => {
     }
   }, []);
 
-  if (loading && !currentStatisticExists) return <div>Loading...</div>;
+  if (loading && !currentStatisticExists) return <Spinner size="4rem" />;
 
-  // TODO: improve card content styles
   if (!loading && currentStatisticExists) {
+    const { country, continent, population, time, cases, tests, deaths } =
+      currentStatistic;
+
     return (
       <Grid container spacing={3}>
         <Grid item xs={12}>
+          <KeyValueSection
+            header={country!}
+            content={[
+              { key: "Continent", value: continent },
+              { key: "Population", value: population },
+              {
+                key: "Last updated",
+                value: formatDate(time!),
+              },
+            ]}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
           <Paper className={classes.paper}>
-            <p>Continent: {renderValueIfExists(currentStatistic?.continent)}</p>
-            <p>Country: {renderValueIfExists(currentStatistic?.country)}</p>
-            <p>
-              Population: {renderValueIfExists(currentStatistic?.population)}
-            </p>
-            <p>
-              Time:{" "}
-              {isNotNullOrUndefined(currentStatistic?.time)
-                ? formatDate(currentStatistic!.time!)
-                : "Unknown"}
-            </p>
+            <KeyValueSection
+              header="Cases"
+              content={[
+                { key: "New", value: cases?.new },
+                { key: "Active", value: cases?.active },
+                { key: "Critical", value: cases?.critical },
+                { key: "Recovered", value: cases?.recovered },
+                { key: "Per 1M population", value: cases?.["1M_pop"] },
+                { key: "Total", value: cases?.total },
+              ]}
+            />
           </Paper>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <Paper className={classes.paper}>
-            <h2>Cases</h2>
-            <p>New: {renderValueIfExists(currentStatistic?.cases?.new)}</p>
-            <p>
-              Active: {renderValueIfExists(currentStatistic?.cases?.active)}
-            </p>
-            <p>
-              Critical: {renderValueIfExists(currentStatistic?.cases?.critical)}
-            </p>
-            <p>
-              Recovered:{" "}
-              {renderValueIfExists(currentStatistic?.cases?.recovered)}
-            </p>
-            <p>
-              1M_pop: {renderValueIfExists(currentStatistic?.cases?.["1M_pop"])}
-            </p>
-            <p>Total: {renderValueIfExists(currentStatistic?.cases?.total)}</p>
+            <KeyValueSection
+              header="Tests"
+              content={[
+                { key: "Per 1M population", value: tests?.["1M_pop"] },
+                { key: "Total", value: tests?.total },
+              ]}
+            />
           </Paper>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <Paper className={classes.paper}>
-            <h2>Tests</h2>
-            <p>
-              1M_pop: {renderValueIfExists(currentStatistic?.tests?.["1M_pop"])}
-            </p>
-            <p>Total: {renderValueIfExists(currentStatistic?.tests?.total)}</p>
+            <KeyValueSection
+              header="Deaths"
+              content={[
+                { key: "New", value: deaths?.new },
+                { key: "Per 1M population", value: deaths?.["1M_pop"] },
+                { key: "Total", value: deaths?.total },
+              ]}
+            />
           </Paper>
         </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <h2>Deaths</h2>
-            <p>New: {renderValueIfExists(currentStatistic?.deaths?.new)}</p>
-            <p>
-              1M_pop:{" "}
-              {renderValueIfExists(currentStatistic?.deaths?.["1M_pop"])}
-            </p>
-            <p>Total: {renderValueIfExists(currentStatistic?.deaths?.total)}</p>
-          </Paper>
+        <Grid item xs={12}>
+          <GoBackHome />
         </Grid>
       </Grid>
     );

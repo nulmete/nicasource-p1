@@ -1,4 +1,10 @@
-import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
+import {
+  Box,
+  createStyles,
+  Divider,
+  makeStyles,
+  Theme,
+} from "@material-ui/core";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -53,6 +59,7 @@ const StatisticsContainer: React.FC = () => {
         inputPlaceholder="Enter a country..."
         handleSearch={handleSearchSubmit}
       />
+      <Divider variant="fullWidth" />
       <Switch>
         <Route path={HOME} exact component={Statistics} />
         <Route path={DETAILS} exact component={StatisticsDetails} />

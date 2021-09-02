@@ -5,6 +5,7 @@ import {
   STATISTICS_LOADING,
   STATISTICS_ERROR,
   STATISTICS_SUCCESS,
+  Statistic,
 } from "./statistics.actionTypes";
 
 export const getStatistics =
@@ -27,6 +28,12 @@ export const getStatistics =
         }
       );
 
+      // There are some entries where continent === country
+      // So, those are redundant and should not be shown
+      const filteredResults = res.data.response.filter(
+        (r: Statistic) => r.continent !== r.country
+      );
+
       // Country param is bad
       const hasError = Object.keys(res.data.errors).length > 0;
       if (hasError) {
@@ -34,7 +41,7 @@ export const getStatistics =
           type: STATISTICS_ERROR,
           payload: {
             errors: res.data.errors,
-            response: res.data.response,
+            response: filteredResults,
           },
         });
       }
@@ -43,7 +50,7 @@ export const getStatistics =
         type: STATISTICS_SUCCESS,
         payload: {
           errors: res.data.errors,
-          response: res.data.response,
+          response: filteredResults,
         },
       });
     } catch (error) {

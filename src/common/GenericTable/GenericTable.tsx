@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { useExpanded, useGroupBy, useTable } from "react-table";
 import { Theme, withStyles, createStyles } from "@material-ui/core";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { Statistic } from "../../components/Statistics/statistics.actionTypes";
 
 const StyledTableCell = withStyles((theme: Theme) =>
@@ -16,6 +17,12 @@ const StyledTableCell = withStyles((theme: Theme) =>
     head: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.common.white,
+    },
+    body: {
+      "& > .cell, & .cell__expand-btn": {
+        display: "flex",
+        alignItems: "center",
+      },
     },
   })
 )(TableCell);
@@ -67,7 +74,7 @@ export const GenericTable: React.FC<GenericTableProps> = ({
           ))}
         </TableHead>
         <TableBody>
-          {rows.map((row, i) => {
+          {rows.map((row) => {
             prepareRow(row);
             return (
               <StyledTableRow {...row.getRowProps()}>
@@ -76,13 +83,17 @@ export const GenericTable: React.FC<GenericTableProps> = ({
                     <StyledTableCell {...cell.getCellProps()}>
                       {cell.isGrouped ? (
                         // If it's a grouped cell, add an expander and row count
-                        <>
-                          <span {...row.getToggleRowExpandedProps()}>
-                            {/* TODO: show expandIcon from MUI */}
-                            {row.isExpanded ? "👇" : "👉"}
-                          </span>{" "}
-                          {cell.render("Cell")} ({row.subRows.length})
-                        </>
+                        <div className="cell">
+                          <div className="cell__text">
+                            {cell.render("Cell")} ({row.subRows.length})
+                          </div>
+                          <div
+                            className="cell__expand-btn"
+                            {...row.getToggleRowExpandedProps()}
+                          >
+                            {row.isExpanded ? <ExpandLess /> : <ExpandMore />}
+                          </div>
+                        </div>
                       ) : cell.isAggregated ? (
                         // If the cell is aggregated, use the Aggregated
                         // renderer for cell
