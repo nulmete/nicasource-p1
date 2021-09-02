@@ -3,7 +3,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import NotFound from "./common/NotFound/NotFound";
 import StatisticsContainer from "./components/Statistics/containers/StatisticsContainer";
-import { buildHomeRoute, HOME, NOT_FOUND } from "./constants/routes";
+import { HOME, NOT_FOUND } from "./constants/routes";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,7 +22,7 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Switch>
           <Route path={NOT_FOUND} exact component={NotFound} />
-          <Route path={buildHomeRoute()} component={StatisticsContainer} />
+          <Route path={HOME} component={StatisticsContainer} />
           {/* ...other routes... */}
         </Switch>
       </BrowserRouter>

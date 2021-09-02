@@ -13,9 +13,12 @@ const useStyles = makeStyles(() =>
       alignItems: "center",
       justifyContent: "center",
     },
+    imageContainer: {
+      marginBottom: "2rem",
+    },
     image: {
       display: "block",
-      width: "100%",
+      maxWidth: "100%",
     },
   })
 );
@@ -25,7 +28,9 @@ const NotFound: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      <img className={classes.image} src={NotFoundImage} alt="Not found" />
+      <div className={classes.imageContainer}>
+        <img className={classes.image} src={NotFoundImage} alt="Not found" />
+      </div>
       <GoBackHome />
     </div>
   );
