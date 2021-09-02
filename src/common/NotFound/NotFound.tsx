@@ -25,7 +25,7 @@ const NotFound: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      <img src={NotFoundImage} alt="Not found" />
+      <img className={classes.image} src={NotFoundImage} alt="Not found" />
       <GoBackHome />
     </div>
   );
