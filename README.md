@@ -1,9 +1,5 @@
 # Front End Assessment for NicaSource | Part 1
 
-## Deployed version
-
-Go to [https://nulmete.github.io/nicasource-p1/](https://nulmete.github.io/nicasource-p1/).
-
 ## Run locally
 
 Clone the repository.
