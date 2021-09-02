@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { CellProps } from "react-table";
+import ClickableCell from "../../../common/GenericTable/ClickableCell";
 import { GenericTable } from "../../../common/GenericTable/GenericTable";
 import { buildDetailsRoute } from "../../../constants/routes";
 import { RootStore } from "../../../state/store";
@@ -21,6 +22,7 @@ export const Statistics: React.FC = () => {
   const dispatch = useDispatch();
 
   const location = useLocation();
+
   const history = useHistory();
 
   const locationState = location?.state as LocationState;
@@ -31,36 +33,14 @@ export const Statistics: React.FC = () => {
         await dispatch(getStatistics());
       })();
     }
-    window.history.replaceState({}, document.title);
+
+    if (locationState?.searchValue) {
+      window.history.replaceState({}, document.title);
+    }
   }, []);
 
   const handleSelectCountry = async (selectedCountry: string) => {
     history.push(buildDetailsRoute(selectedCountry));
-  };
-
-  // TODO: move to separate component
-  interface ClickableCellProps {
-    valueToShow: string;
-    onClick: React.MouseEventHandler<HTMLDivElement>;
-  }
-  const ClickableCell: React.FC<ClickableCellProps> = ({
-    valueToShow,
-    onClick,
-  }) => {
-    return (
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={onClick}
-        // TODO accessibility
-        onKeyDown={() => {
-          console.log("keydown");
-        }}
-        style={{ cursor: "pointer" }}
-      >
-        {valueToShow}
-      </div>
-    );
   };
 
   const CustomCell: React.FC<CellProps<Statistic>> = ({ cell }) => {
@@ -109,7 +89,8 @@ export const Statistics: React.FC = () => {
     [statistics]
   );
 
-  if (loading) return <div>Loading</div>;
+  // TODO: spinner?
+  if (loading) return <div>Loading...</div>;
 
   if (error) {
     return (
@@ -119,6 +100,7 @@ export const Statistics: React.FC = () => {
     );
   }
 
+  // TODO: style
   if (!loading && statistics.length === 0) return <div>No results found</div>;
 
   return <GenericTable columns={columns} data={statistics} />;

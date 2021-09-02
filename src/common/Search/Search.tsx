@@ -49,9 +49,9 @@ const Search: React.FC<Props> = ({
         }}
       />
       <Button
-        className={classes.button}
         variant="contained"
         color="primary"
+        className={classes.button}
         type="submit"
       >
         Search

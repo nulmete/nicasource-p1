@@ -78,6 +78,7 @@ export const GenericTable: React.FC<GenericTableProps> = ({
                         // If it's a grouped cell, add an expander and row count
                         <>
                           <span {...row.getToggleRowExpandedProps()}>
+                            {/* TODO: show expandIcon from MUI */}
                             {row.isExpanded ? "👇" : "👉"}
                           </span>{" "}
                           {cell.render("Cell")} ({row.subRows.length})
@@ -86,7 +87,8 @@ export const GenericTable: React.FC<GenericTableProps> = ({
                         // If the cell is aggregated, use the Aggregated
                         // renderer for cell
                         cell.render("Aggregated")
-                      ) : cell.isPlaceholder ? null : ( // For cells with repeated values, render null
+                      ) : // For cells with repeated values, render null
+                      cell.isPlaceholder ? null : (
                         // Otherwise, just render the regular cell
                         cell.render("Cell")
                       )}

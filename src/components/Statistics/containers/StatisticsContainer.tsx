@@ -1,10 +1,15 @@
 import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Switch, useHistory, useLocation } from "react-router-dom";
-import NotFound from "../../../common/NotFound/NotFound";
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 import Search from "../../../common/Search/Search";
-import { DETAILS, HOME } from "../../../constants/routes";
+import { DETAILS, HOME, NOT_FOUND } from "../../../constants/routes";
 import { Statistics } from "../screens/Statistics";
 import StatisticsDetails from "../screens/StatisticsDetails";
 import { getStatistics } from "../statistics.action";
@@ -51,7 +56,7 @@ const StatisticsContainer: React.FC = () => {
       <Switch>
         <Route path={HOME} exact component={Statistics} />
         <Route path={DETAILS} exact component={StatisticsDetails} />
-        <Route component={NotFound} />
+        <Redirect to={NOT_FOUND} />
       </Switch>
     </Box>
   );
